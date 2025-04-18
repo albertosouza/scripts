@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Script: cursor-update.sh
+# Descrição: Este script atualiza uma instalação existente do editor Cursor no Linux.
+# O script baixa a versão mais recente do Cursor, faz backup da versão anterior
+# e atualiza a instalação em /opt.
+#
+# Funcionalidades:
+# - Verifica e solicita privilégios sudo
+# - Verifica se o Cursor está instalado
+# - Baixa a última versão do Cursor
+# - Faz backup da versão anterior
+# - Atualiza a instalação mantendo o mesmo local
+
 if [ "$EUID" -ne 0 ]; then
     echo "Solicitando acesso sudo para atualizar o Cursor..."
     exec sudo "$0" "$@"
