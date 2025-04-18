@@ -101,10 +101,10 @@ cursor-update.sh
 ## Links
 
 - [Site do Alberto Souza](https://albertosouza.net)
-- [Caramelo AI](https://caramelo.ai)
+- [Caramelo AI](https://carameloai.com)
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE.md) para detalhes.
 
-Copyright (c) 2025 Your Name
+Copyright (c) 2025 Alberto Souza
