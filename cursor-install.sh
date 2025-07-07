@@ -1,75 +1,49 @@
 #!/bin/bash
 
-# Script: cursor-install.sh
-# Descrição: Este script automatiza a instalação do editor Cursor no Linux.
-# O script baixa a versão mais recente do Cursor, instala como AppImage em /opt
-# e cria um atalho no menu de aplicativos do sistema.
-#
-# Funcionalidades:
-# - Verifica e solicita privilégios sudo
-# - Baixa a última versão do Cursor
-# - Instala o AppImage em /opt
-# - Cria atalho no menu de aplicativos
-# - Gerencia erros de download e instalação
+installCursor() {
+    if ! [ -f /opt/cursor.appimage ]; then
+        echo "Installing Cursor AI IDE..."
 
-if [ "$EUID" -ne 0 ]; then
-    echo "Solicitando acesso sudo para instalar o Cursor..."
-    exec sudo "$0" "$@"
-    exit $?
-fi
+        # URLs for Cursor AppImage and Icon
+        CURSOR_URL="https://downloader.cursor.sh/linux/appImage/x64"
+        ICON_URL="https://raw.githubusercontent.com/rahuljangirwork/copmany-logos/refs/heads/main/cursor.png"
 
-if [ -f "/opt/cursor.appimage" ]; then
-    echo "Cursor já está instalado em /opt/cursor.appimage"
-    echo "Para atualizar, use o script cursor-update.sh"
-    exit 1
-fi
+        # Paths for installation
+        APPIMAGE_PATH="/opt/cursor.appimage"
+        ICON_PATH="/opt/cursor.png"
+        DESKTOP_ENTRY_PATH="/usr/share/applications/cursor.desktop"
 
-TEMP_DIR=$(mktemp -d)
-cd "$TEMP_DIR"
+        # Install curl if not installed
+        if ! command -v curl &> /dev/null; then
+            echo "curl is not installed. Installing..."
+            sudo apt-get update
+            sudo apt-get install -y curl
+        fi
 
-echo "Verificando a versão mais recente do Cursor..."
-if ! DOWNLOAD_INFO=$(curl -s -H "sec-ch-ua: \"Google Chrome\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"" \
-    -H "sec-ch-ua-mobile: ?0" \
-    -H "sec-ch-ua-platform: \"Linux\"" \
-    "https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable"); then
-    echo "Erro: Falha ao obter informações de download"
-    exit 1
-fi
+        # Download Cursor AppImage
+        echo "Downloading Cursor AppImage..."
+        sudo curl -L $CURSOR_URL -o $APPIMAGE_PATH
+        sudo chmod +x $APPIMAGE_PATH
 
-DOWNLOAD_URL=$(echo "$DOWNLOAD_INFO" | grep -o '"downloadUrl":"[^"]*"' | cut -d'"' -f4)
-VERSION=$(echo "$DOWNLOAD_INFO" | grep -o '"version":"[^"]*"' | cut -d'"' -f4)
+        # Download Cursor icon
+        echo "Downloading Cursor icon..."
+        sudo curl -L $ICON_URL -o $ICON_PATH
 
-if [ -z "$DOWNLOAD_URL" ] || [ -z "$VERSION" ]; then
-    echo "Erro: Falha ao analisar informações de download"
-    exit 1
-fi
-
-echo "Baixando Cursor versão ${VERSION}..."
-if ! curl -L -o cursor.AppImage "$DOWNLOAD_URL"; then
-    echo "Erro: Falha ao baixar o Cursor AppImage"
-    exit 1
-fi
-
-chmod +x cursor.AppImage
-
-echo "Instalando Cursor..."
-mv cursor.AppImage /opt/cursor.appimage
-
-# Criar atalho no desktop
-cat > /usr/share/applications/cursor.desktop << EOL
+        # Create a .desktop entry for Cursor
+        echo "Creating .desktop entry for Cursor..."
+        sudo bash -c "cat > $DESKTOP_ENTRY_PATH" <<EOL
 [Desktop Entry]
-Name=Cursor
-Exec=/opt/cursor.appimage
-Icon=cursor
+Name=Cursor AI IDE
+Exec=$APPIMAGE_PATH
+Icon=$ICON_PATH
 Type=Application
-Categories=Development;IDE;
-Comment=AI-first code editor
+Categories=Development;
 EOL
 
-echo "Instalação concluída! Cursor ${VERSION} foi instalado em /opt/cursor.appimage"
-echo "Um atalho foi criado no menu de aplicativos"
-echo "Você pode executar o Cursor através do menu de aplicativos ou executando: /opt/cursor.appimage"
+        echo "Cursor AI IDE installation complete. You can find it in your application menu."
+    else
+        echo "Cursor AI IDE is already installed."
+    fi
+}
 
-# Limpeza
-cd /
-rm -rf "$TEMP_DIR"
+installCursor
