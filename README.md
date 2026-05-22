@@ -60,6 +60,21 @@ set-scripts-in-path.sh
 - Verifica instalação existente
 - Fornece instruções de ativação
 
+### antigravity-install.sh
+Baixa e instala/configura o Google Antigravity Hub e o Antigravity IDE no Ubuntu.
+
+**Uso:**
+```bash
+antigravity-install.sh
+```
+
+**Funcionalidades:**
+- Detecta a arquitetura do processador (x86_64 ou ARM64)
+- Consulta as APIs oficiais para obter as últimas versões estáveis
+- Oferece opção interativa para instalar o Antigravity Hub, o Antigravity IDE ou ambos
+- Configura atalhos no menu de aplicativos e cria links simbólicos no PATH (/usr/local/bin)
+- Requer privilégios sudo (solicitados automaticamente)
+
 ## Exemplos de Uso
 
 1. Instalação completa do ambiente:
