@@ -72,7 +72,7 @@ echo ""
 echo -e "${BLUE}[3/5] Consultando versões estáveis mais recentes...${NC}"
 
 # Buscar dados do Antigravity Hub
-HUB_RELEASE_INFO=$(curl -s "https://antigravity-auto-updater-974169037036.us-central1.run.app/releases")
+HUB_RELEASE_INFO=$(curl -s "https://antigravity-hub-auto-updater-974169037036.us-central1.run.app/releases")
 HUB_VERSION=$(echo "$HUB_RELEASE_INFO" | jq -r '.[0].version')
 HUB_EXEC_ID=$(echo "$HUB_RELEASE_INFO" | jq -r '.[0].execution_id')
 
